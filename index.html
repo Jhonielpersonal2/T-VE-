@@ -79,11 +79,17 @@
         }
 
         #channelList {
-            padding: 20px;
-            overflow-y: auto;
-            height: calc(60vh - 100px); /* Espacio ajustado por la nueva sección */
-            margin-top: 44vh; /* Añadido para evitar superposición */
-        }
+            position: fixed; /* Mantiene la sección en un lugar fijo */
+    padding: 20px;
+    overflow-y: auto;
+    height: calc(60vh - 100px); /* Espacio ajustado por la nueva sección */
+    top: 44vh; /* Ajusta la posición vertical según sea necesario */
+    left: -10px; /* O ajusta según la alineación deseada */
+    right: 0; /* O ajusta según la alineación deseada */
+    z-index: 10; /* Asegúrate de que esté por encima de otros elementos si es necesario */
+    background-color: #0d0d0d; /* Fondo más oscuro que el de Netflix */
+    
+}
 
         ol {
             padding-left: 20px;
@@ -143,7 +149,7 @@
 
     <!-- Lista de canales numerados -->
     <div id="channelList">
-        <h2>Lista de Canales</h2>
+        <h2></h2>
         <ol id="channels">
             <!-- Los canales serán cargados dinámicamente aquí -->
         </ol>
