@@ -4,125 +4,154 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IPTV TV Player</title>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script> <!-- Librería HLS.js -->
     <style>
         body, html {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #000;
-            font-family: Arial, sans-serif;
-            color: #fff;
-        }
-
-        #videoPlayerContainer {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 40vh; /* El reproductor ocupará el 40% de la pantalla */
-            background-color: #000;
-            z-index: 10;
-        }
-
-        #videoPlayer {
-            width: 100%;
-            height: 100%;
-            display: none; /* Ocultamos el video mientras se carga */
-        }
-
-        #loadingScreen {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            height: 100%;
-            background-color: #000;
-            color: #fff;
-            font-size: 3em;
-            font-weight: bold;
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: 100; /* Por encima del reproductor */
-        }
-
-        #flixyText {
-            color: red;
-        }
-
-        #tvText {
-            color: white;
-        }
-
-        #currentChannelInfo {
-            position: fixed; /* Cambiado a fixed */
-            top: 40vh; /* Justo debajo del reproductor */
-            left: 0;
-            width: 100%; /* Asegura que ocupe todo el ancho */
-            background-color: #111;
-            padding: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 20; /* Debajo del reproductor */
-        }
-
-        #currentChannelInfo img {
-            width: 40;
-            height: 30px;
-            margin-right: 20px;
-        }
-
-        #currentChannelInfo span {
-            font-size: 1.0em;
-        }
-
-        #channelList {
-            position: fixed; /* Mantiene la sección en un lugar fijo */
-    padding: 20px;
-    overflow-y: auto;
-    height: calc(60vh - 100px); /* Espacio ajustado por la nueva sección */
-    top: 44vh; /* Ajusta la posición vertical según sea necesario */
-    left: -10px; /* O ajusta según la alineación deseada */
-    right: 0; /* O ajusta según la alineación deseada */
-    z-index: 10; /* Asegúrate de que esté por encima de otros elementos si es necesario */
-    background-color: #0d0d0d; /* Fondo más oscuro que el de Netflix */
-    
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #000; /* Fondo oscuro */
+    font-family: Arial, sans-serif;
+    color: #fff; /* Texto claro */
 }
 
-        ol {
-            padding-left: 20px;
-        }
+#videoPlayerContainer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 40vh; /* El reproductor ocupará el 40% de la pantalla */
+    background-color: #000;
+    z-index: 10;
+}
 
-        ol li {
-            margin: 10px 0;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-        }
+#videoPlayer {
+    width: 100%;
+    height: 100%;
+    display: none; /* Ocultamos el video mientras se carga */
+}
 
-        ol li img {
-            width: 40px;
-            height: 40px;
-            margin-right: 10px;
-        }
+#loadingScreen {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    color: #fff;
+    font-size: 3em;
+    font-weight: bold;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 100; /* Por encima del reproductor */
+}
 
-        ol li:hover {
-            color: #ff6347;
-        }
+#flixyText {
+    color: red;
+}
 
-        hr {
-            border: none;
-            border-top: 1px solid #555;
-            margin: 10px 0;
-        }
+#tvText {
+    color: white;
+}
 
-        h2 {
-            text-align: center;
-            margin-top: 0;
-            padding-top: 20px;
-        }
+#currentChannelInfo {
+    position: fixed;
+    top: 40vh;
+    left: 0;
+    width: 100%;
+    background-color: #111; /* Fondo gris oscuro */
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 20;
+}
+
+#currentChannelInfo img {
+    width: 40px;
+    height: 30px;
+    margin-right: 20px;
+}
+
+#currentChannelInfo span {
+    font-size: 1.0em;
+}
+
+#channelList {
+    position: fixed;
+    padding: 20px;
+    overflow-y: auto;
+    height: calc(60vh - 100px);
+    top: 44vh;
+    left: -10px;
+    right: 0;
+    z-index: 10;
+    background-color: #0d0d0d; /* Fondo gris oscuro */
+}
+
+.category {
+    margin: 10px 0;
+}
+
+.category-button {
+    background-color: #1E1E1E; /* Gris oscuro más claro */
+    color: #e0e0e0; /* Texto claro */
+    padding: 12px 20px; /* Aumenta el padding para un mejor aspecto */
+    border: none;
+    border-radius: 5px; /* Bordes redondeados */
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+    outline: none;
+    font-size: 1.1em;
+    transition: background-color 0.3s, transform 0.2s; /* Transiciones suaves */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Sombra suave */
+}
+
+.category-button:hover {
+    background-color: #555; /* Color más claro al pasar el mouse */
+    transform: scale(1.02); /* Efecto de escala al pasar el mouse */
+}
+
+.channel-list {
+    display: none; /* Ocultamos la lista de canales por defecto */
+    padding-left: 5px;
+}
+
+.channel-list li {
+    margin: 5px 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-radius: 3px; /* Bordes redondeados */
+    transition: background-color 0.3s; /* Transición suave para el fondo */
+     background-color: #000000; /* Fondo negro */
+}
+
+.channel-list li:hover {
+    background-color: rgba(255, 255, 255, 0.1); /* Fondo claro al pasar el mouse */
+}
+
+.channel-list li img {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+}
+
+hr {
+    border: none;
+    border-top: 1px solid #555;
+    margin: 10px 0;
+}
+
+h2 {
+    text-align: center;
+    margin-top: 0;
+    padding-top: 40px;
+}
     </style>
 </head>
 <body>
@@ -135,8 +164,7 @@
         </div>
         
         <!-- Reproductor de video oculto inicialmente -->
-        <video id="videoPlayer" autoplay>
-            <source src="" type="application/x-mpegURL">
+        <video id="videoPlayer"  autoplay controls>
             Tu navegador no soporta la reproducción de video.
         </video>
     </div>
@@ -147,108 +175,172 @@
         <span id="currentChannelText">Selecciona un canal</span>
     </div>
 
-    <!-- Lista de canales numerados -->
+    <!-- Lista de canales por categorías -->
     <div id="channelList">
-        <h2></h2>
-        <ol id="channels">
-            <!-- Los canales serán cargados dinámicamente aquí -->
-        </ol>
+        <h2> 👉 CATEGORÍAS 👈 </h2>
+        <div id="categories"></div>
     </div>
 
     <script>
-        // Función para cargar la lista M3U y procesarla
-        async function loadM3UList(url) {
-            try {
-                const response = await fetch(url);
-                const data = await response.text();
-                processM3UList(data);
-            } catch (error) {
-                console.error('Error al cargar la lista M3U:', error);
+    // Función para cargar la lista M3U y procesarla
+async function loadM3UList(url) {
+    try {
+        const response = await fetch(url);
+        const data = await response.text();
+        processM3UList(data);
+    } catch (error) {
+        console.error('Error al cargar la lista M3U:', error);
+    }
+}
+
+// Función para procesar el contenido de la lista M3U
+function processM3UList(m3uText) {
+    const lines = m3uText.split('\n');
+    const channels = {};
+    let currentChannel = null; // Cambiar a null para asegurar una verificación más fácil
+
+    lines.forEach(line => {
+        if (line.startsWith('#EXTINF')) {
+            const channelInfo = line.split(',');
+            const logoMatch = line.match(/tvg-logo="(.*?)"/);
+            const categoryMatch = line.match(/group-title="(.*?)"/);
+
+            // Crear un nuevo canal
+            currentChannel = {
+                name: channelInfo[1].trim(),
+                logo: logoMatch ? logoMatch[1] : '',
+                url: '', // Inicializa la URL aquí
+            };
+
+            const category = categoryMatch ? categoryMatch[1] : 'Otros';
+            if (!channels[category]) channels[category] = [];
+            channels[category].push(currentChannel); // Agregar canal a la categoría
+        } else if (line.startsWith('http') && currentChannel) {
+            currentChannel.url = line.trim(); // Asigna la URL al canal actual
+        }
+    });
+
+    displayCategories(channels);
+}
+
+// Función para mostrar las categorías de canales
+function displayCategories(channels) {
+    const categoriesDiv = document.getElementById('categories');
+    for (const category in channels) {
+        const categoryDiv = document.createElement('div');
+        categoryDiv.classList.add('category');
+
+        // Crear botón de la categoría
+        const button = document.createElement('button');
+        button.classList.add('category-button');
+        button.textContent = category;
+        button.onclick = (event) => toggleChannelList(event, category); // Pasar el evento y la categoría
+
+        categoryDiv.appendChild(button);
+
+        // Crear lista de canales
+        const channelList = document.createElement('ul');
+        channelList.classList.add('channel-list');
+        channelList.id = `list-${category.replace(/\s+/g, '')}`; // ID único para cada lista de canales
+        channels[category].forEach((channel, index) => {
+            const li = document.createElement('li');
+
+            // Crear imagen para el logo
+            const img = document.createElement('img');
+            img.src = channel.logo || 'https://via.placeholder.com/40'; // Logo o placeholder si no hay
+
+            // Añadir el número, logo y nombre del canal
+            li.appendChild(document.createTextNode(`${index + 1}. `));
+            li.appendChild(img);
+            li.appendChild(document.createTextNode(channel.name || `Canal ${index + 1}`));
+
+            li.onclick = () => changeChannel(channel, index + 1);
+            channelList.appendChild(li);
+        });
+
+        categoryDiv.appendChild(channelList);
+        categoriesDiv.appendChild(categoryDiv);
+    }
+}
+
+// Función para mostrar/ocultar la lista de canales de una categoría
+function toggleChannelList(event, category) {
+    const listId = `list-${category.replace(/\s+/g, '')}`;
+    const channelList = document.getElementById(listId);
+    const button = event.currentTarget; // Obtener el botón que fue clicado
+    channelList.style.display = channelList.style.display === 'block' ? 'none' : 'block';
+
+    // Cambiar el texto del botón según el estado de la lista
+    if (channelList.style.display === 'block') {
+        button.textContent = `Ocultar ${category}`; // Cambiar a "Ocultar" al abrir
+    } else {
+        button.textContent = category; // Restaurar el texto original al cerrar
+    }
+}
+
+// Función para cambiar de canal en el reproductor y mostrar la información del canal
+function changeChannel(channel, number) {
+    const videoPlayer = document.getElementById('videoPlayer');
+    const loadingScreen = document.getElementById('loadingScreen');
+
+    // Mostrar la pantalla de carga
+    videoPlayer.style.display = 'none';
+    loadingScreen.style.display = 'flex';
+
+    // Verificar si es m3u8 para usar hls.js
+    if (Hls.isSupported()) {
+        var hls = new Hls();
+        hls.loadSource(channel.url);
+        hls.attachMedia(videoPlayer);
+
+        hls.on(Hls.Events.MANIFEST_PARSED, function () {
+            videoPlayer.play();
+        });
+
+        // Manejo de errores para detectar problemas con el stream
+        hls.on(Hls.Events.ERROR, function (event, data) {
+            if (data.fatal) {
+                switch (data.type) {
+                    case Hls.ErrorTypes.NETWORK_ERROR:
+                        console.error("Network error: ", data);
+                        break;
+                    case Hls.ErrorTypes.MEDIA_ERROR:
+                        console.error("Media error: ", data);
+                        break;
+                    default:
+                        console.error("General error: ", data);
+                        hls.destroy();
+                        break;
+                }
             }
+        });
+    } else if (videoPlayer.canPlayType('application/vnd.apple.mpegurl')) {
+        videoPlayer.src = channel.url;
+        videoPlayer.addEventListener('canplay', function () {
+            videoPlayer.play();
+        });
+    } else {
+        console.error("Este navegador no soporta HLS.");
+    }
+
+    // Este evento se disparará cuando el video realmente comience a mostrar contenido
+    videoPlayer.ontimeupdate = () => {
+        if (videoPlayer.currentTime > 0) {
+            loadingScreen.style.display = 'none'; // Ocultar la pantalla de carga
+            videoPlayer.style.display = 'block';  // Mostrar el reproductor
         }
+    };
 
-        // Función para procesar el contenido de la lista M3U
-        function processM3UList(m3uText) {
-            const lines = m3uText.split('\n');
-            const channels = [];
-            let currentChannel = {};
+    // Actualizar la información del canal
+    const channelLogo = document.getElementById('currentChannelLogo');
+    const channelText = document.getElementById('currentChannelText');
 
-            lines.forEach(line => {
-                if (line.startsWith('#EXTINF')) {
-                    const channelInfo = line.split(',');
-                    const logoMatch = line.match(/tvg-logo="(.*?)"/); // Buscar el logo en la línea
-                    currentChannel.name = channelInfo[1].trim();
-                    currentChannel.logo = logoMatch ? logoMatch[1] : ''; // Guardar el logo si existe
-                } else if (line.startsWith('http')) {
-                    currentChannel.url = line.trim();
-                    channels.push(currentChannel);
-                    currentChannel = {}; // Reset para el siguiente canal
-                }
-            });
+    channelLogo.src = channel.logo || 'https://via.placeholder.com/50';
+    channelText.textContent = `${number}. ${channel.name || `Canal ${number}`}`;
+}
 
-            displayChannels(channels);
-        }
-
-        // Función para mostrar la lista de canales en la página
-        function displayChannels(channels) {
-            const channelsList = document.getElementById('channels');
-            channels.forEach((channel, index) => {
-                const li = document.createElement('li');
-
-                // Crear imagen para el logo
-                const img = document.createElement('img');
-                img.src = channel.logo || 'https://via.placeholder.com/40'; // Logo o placeholder si no hay
-
-                // Añadir el número, logo y nombre del canal
-                li.appendChild(document.createTextNode(`${index + 1}. `));
-                li.appendChild(img);
-                li.appendChild(document.createTextNode(channel.name || `Canal ${index + 1}`));
-
-                li.onclick = () => changeChannel(channel, index + 1);
-                channelsList.appendChild(li);
-
-                // Añadir separador
-                const hr = document.createElement('hr');
-                channelsList.appendChild(hr);
-            });
-        }
-
-        // Función para cambiar de canal en el reproductor y mostrar la información del canal
-        function changeChannel(channel, number) {
-            const videoPlayer = document.getElementById('videoPlayer');
-            const loadingScreen = document.getElementById('loadingScreen');
-
-            // Mostrar la pantalla de carga
-            videoPlayer.style.display = 'none';
-            loadingScreen.style.display = 'flex';
-
-            // Actualizar la URL del canal y empezar a cargar el video
-            videoPlayer.src = channel.url;
-
-            // Esperar hasta que el video esté listo para reproducirse
-            videoPlayer.oncanplay = () => {
-                videoPlayer.play(); // Comienza a reproducir
-            };
-
-            // Este evento se disparará cuando el video realmente comience a mostrar contenido
-            videoPlayer.ontimeupdate = () => {
-                if (videoPlayer.currentTime > 0) {
-                    loadingScreen.style.display = 'none'; // Ocultar la pantalla de carga
-                    videoPlayer.style.display = 'block';  // Mostrar el reproductor
-                }
-            };
-
-            // Actualizar la información del canal
-            const channelLogo = document.getElementById('currentChannelLogo');
-            const channelText = document.getElementById('currentChannelText');
-            
-            channelLogo.src = channel.logo || 'https://via.placeholder.com/50';
-            channelText.textContent = `${number}. ${channel.name || `Canal ${number}`}`;
-        }
-
-        // Cargar la lista M3U al cargar la página
-        loadM3UList('https://raw.githubusercontent.com/Iptv-cnls/Listas/refs/heads/main/lista3.m3u');
-    </script>
-
+// Cargar la lista M3U al cargar la página
+loadM3UList('https://raw.githubusercontent.com/Iptv-cnls/Listas/refs/heads/main/lista3.m3u');
+</script>
 </body>
 </html>
